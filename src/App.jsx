@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 import "./App.css";
 
@@ -12,6 +12,7 @@ function App() {
   const [isCamaraOn, setIsCamaraOn] = useState(false);
   const [parcial, setParcial] = useState(0);
   const [prediccion, setPrediccion] = useState(0);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [reset, setReset] = useState("");
   const [respuesta, setRespuesta] = useState("");
   const [respuestaupload, setRespuestaUpload] = useState("");
@@ -23,14 +24,16 @@ function App() {
 
   const handleCamaraToggle = async () => {
     if (isCamaraOn) {
-      const resp = await fetch(`http://localhost:5000/reset`, {
+      // const resp = await fetch(`http://localhost:5000/reset`, {
+        const resp = await fetch(`http://109.205.182.229:5000/reset`, {
         method: "POST",
       });
       setParcial(0);
       setPrediccion(0);
       setRespuesta(0);
-      setReset(resp);
-      console.log(reset);
+      const respreset = await resp.json();
+      setReset(respreset);
+      console.log(respreset);
     }
     setIsCamaraOn((prevIsCamaraOn) => !prevIsCamaraOn);
     console.log("Camara prendida");
@@ -44,7 +47,9 @@ function App() {
 
   const handleParcialSubmit = async (event) => {
     event.preventDefault();
-    const res = await fetch(`http://localhost:5000/parcial`, {
+    setIsButtonDisabled(true);
+    const res = await fetch(`http://109.205.182.229:5000/partial`, {
+    // const res = await fetch(`http://localhost:5000/partial`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +69,8 @@ function App() {
     const fileName = `photo${pCount}.jpg`;
     const formData = new FormData();
     formData.append("file", blob, fileName);
-    const resimg = await fetch(`http://localhost:5000/upload`, {
+    const resimg = await fetch(`http://109.205.182.229:5000/upload`, {
+    // const resimg = await fetch(`http://localhost:5000/upload`, {
       method: "POST",
       body: formData,
     });
@@ -73,12 +79,14 @@ function App() {
     pCount++;
     console.log(responseData, pCount);
     if (pCount === 4) {
-      const prediccionNota = await fetch(`http://localhost:5000/prediccion`, {
+      const prediccionNota = await fetch(`http://109.205.182.229:5000/prediccion`, {
+      // const prediccionNota = await fetch(`http://localhost:5000/prediccion`, {
         method: "POST",
       });
       const prediccionData = await prediccionNota.json();
-      setPrediccion(prediccionData.prediccion);
+      setPrediccion(prediccionData.Prediction);
       console.log(prediccionData);
+      setIsButtonDisabled(false);
     }
   };
 
@@ -102,6 +110,7 @@ function App() {
   };
 
   const handleMouseOver = () => {
+
     let iteration = 0;
     clearInterval(intervalId);
     const newIntervalId = setInterval(() => {
@@ -147,7 +156,9 @@ function App() {
                       onChange={handleParcialChange}
                     />
                   </div>
-                  <button>Nota parcial</button>
+                  <button disabled={isButtonDisabled}>
+                    {isButtonDisabled ? "esperando prediccion" : "Nota parcial"}
+                  </button>
                 </form>
               )}
             </div>
@@ -165,8 +176,9 @@ function App() {
           {isCamaraOn && (
             <div className="text-between">
               <p>
-                Se estima un promedio de: {prediccion.toFixed(2)} para este
-                parcial
+                {prediccion === 0
+                  ? "No se detectaron emociones en las imagenes"
+                  : `Se estima un promedio de ${prediccion} para este parcial`}
               </p>
             </div>
           )}
