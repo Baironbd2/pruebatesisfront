@@ -1,18 +1,14 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Webcam from "react-webcam";
 import "./App.css";
-
-// const baseUrl = process.env.REACT_APP_BASE_URL;
-// const resetUrl = `${baseUrl}/reset`;
-// const parcialUrl = `${baseUrl}/parcial`;
-// const uploadUrl = `${baseUrl}/upload`;
-// const prediccionUrl = `${baseUrl}/prediccion`;
+const URL = import.meta.env.VITE_URL
 
 function App() {
   const [isCamaraOn, setIsCamaraOn] = useState(false);
   const [parcial, setParcial] = useState(0);
-  const [prediccion, setPrediccion] = useState(0);
+  const [prediccion, setPrediccion] = useState(1);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [timeoutIds, setTimeoutIds] = useState([]);
   const [reset, setReset] = useState("");
   const [respuesta, setRespuesta] = useState("");
   const [respuestaupload, setRespuestaUpload] = useState("");
@@ -24,19 +20,22 @@ function App() {
 
   const handleCamaraToggle = async () => {
     if (isCamaraOn) {
-      // const resp = await fetch(`http://localhost:5000/reset`, {
-        const resp = await fetch(`http://109.205.182.229:5000/reset`, {
+      const resp = await fetch(`${URL}/reset`, {
+        // const resp = await fetch(`http://localhost:5000/reset`, {
         method: "POST",
       });
       setParcial(0);
-      setPrediccion(0);
+      setPrediccion(1);
       setRespuesta(0);
+      setIsButtonDisabled(false);
+      pCount = 1;
       const respreset = await resp.json();
       setReset(respreset);
       console.log(respreset);
+      timeoutIds.forEach((id) => clearTimeout(id));
+      setTimeoutIds([]);
     }
     setIsCamaraOn((prevIsCamaraOn) => !prevIsCamaraOn);
-    console.log("Camara prendida");
   };
 
   const videoConstraints = {
@@ -48,8 +47,8 @@ function App() {
   const handleParcialSubmit = async (event) => {
     event.preventDefault();
     setIsButtonDisabled(true);
-    const res = await fetch(`http://109.205.182.229:5000/partial`, {
-    // const res = await fetch(`http://localhost:5000/partial`, {
+    const res = await fetch(`${URL}/partial`, {
+      // const res = await fetch(`http://localhost:5000/partial`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -69,8 +68,8 @@ function App() {
     const fileName = `photo${pCount}.jpg`;
     const formData = new FormData();
     formData.append("file", blob, fileName);
-    const resimg = await fetch(`http://109.205.182.229:5000/upload`, {
-    // const resimg = await fetch(`http://localhost:5000/upload`, {
+    const resimg = await fetch(`${URL}/upload`, {
+      // const resimg = await fetch(`http://localhost:5000/upload`, {
       method: "POST",
       body: formData,
     });
@@ -79,10 +78,11 @@ function App() {
     pCount++;
     console.log(responseData, pCount);
     if (pCount === 4) {
-      const prediccionNota = await fetch(`http://109.205.182.229:5000/prediccion`, {
-      // const prediccionNota = await fetch(`http://localhost:5000/prediccion`, {
-        method: "POST",
-      });
+      const prediccionNota = await fetch(`${URL}/prediccion`,{
+     // const prediccionNota = await fetch(`http://localhost:5000/prediccion`, {
+          method: "POST",
+        }
+      );
       const prediccionData = await prediccionNota.json();
       setPrediccion(prediccionData.Prediction);
       console.log(prediccionData);
@@ -103,14 +103,14 @@ function App() {
     const randomIntervals = Array.from({ length: 2 }, () =>
       Math.floor(Math.random() * (1 * 30 * 1000))
     );
-
-    randomIntervals.forEach((interval) => {
-      setTimeout(capture, interval);
+    const newTimeoutIds = randomIntervals.map((interval) => {
+      return setTimeout(capture, interval);
     });
+  
+    setTimeoutIds((prevTimeoutIds) => [...prevTimeoutIds, ...newTimeoutIds]);
   };
 
   const handleMouseOver = () => {
-
     let iteration = 0;
     clearInterval(intervalId);
     const newIntervalId = setInterval(() => {
@@ -157,7 +157,7 @@ function App() {
                     />
                   </div>
                   <button disabled={isButtonDisabled}>
-                    {isButtonDisabled ? "esperando prediccion" : "Nota parcial"}
+                    {isButtonDisabled ? "Esperando prediccion" : "Nota parcial"}
                   </button>
                 </form>
               )}
@@ -175,11 +175,11 @@ function App() {
           )}
           {isCamaraOn && (
             <div className="text-between">
-              <p>
-                {prediccion === 0
-                  ? "No se detectaron emociones en las imagenes"
-                  : `Se estima un promedio de ${prediccion} para este parcial`}
-              </p>
+              {prediccion === 0
+                ? "No se detectaron emociones en las imagenes"
+                : prediccion === 1
+                ? "Esperando predicción"
+                : `Se estima un promedio de ${prediccion} para este parcial`}
             </div>
           )}
           <div className="border-top">
@@ -196,27 +196,20 @@ function App() {
       {!isCamaraOn && (
         <div className="page">
           <div className="instruccion">
-            <h1>Instruccion</h1>
+            <h1>INSTRUCCIÓN</h1>
             <div className="cards">
               <div className="border-top">
                 <div className="card-body">
-                  <h2>Como funciona</h2>
+                  <h2>¿Como funciona?</h2>
                   <h4>
-                    1.- Al momento de prender la camara el usuario debera elegir
-                    el parcial en el que los sujetos estan, la aplicacion tomara
-                    al azar 3 fotos las mismas que seran enviadas a los modelos
+                    1.- Al momento de prender la cámara el usuario deberá elegir
+                    el parcial en el que los sujetos están, la aplicacion tomara
+                    al azar 3 fotos las mismas que serán enviadas a los modelos
                     para identificar los sujetos y sus emociones.
                   </h4>
                   <h4>
-                    2.- Una vez las imagenes sean analizadas y procesadas por
-                    los modelos, la aplicacion web mostrara las imagenes con sus
-                    respectivas prediciones, una imagen a la vez conforme sean
-                    analizadas y devueltas
-                  </h4>
-                  <h4>
-                    3.- Al final despues de la tercera foto, el modelo dara un
-                    estimado de las emociones totales de los sujetos analizados
-                    y dara un estimado de su promedio basado en las emociones
+                    2.- Al final, después de la tercera foto, el modelo dará un
+                    estimado de su promedio basado en las emociones.
                   </h4>
                 </div>
               </div>
@@ -224,10 +217,10 @@ function App() {
                 <div className="card-body">
                   <h2>Predicciones</h2>
                   <h4>
-                    CNN.- Las imagenes seran analizadas con Redes Neuronales
+                    CNN.- Las imágenes serán analizadas con Redes Neuronales
                     Convolucionales (2 CNN) previamente entrenadas, una para la
-                    deteccion del rostro y otra para la identificacion de las
-                    emociones
+                    detección del rostro y otra para la identificación de las
+                    emociones.
                   </h4>
                   <h4>
                     PREDICCION.- Se entreno un modelo predictivo para dar un
