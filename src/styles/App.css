@@ -1,0 +1,103 @@
+.instruccion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  flex-direction:column;
+  border-radius: 10px;
+}
+
+.camera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  flex: 1;
+  flex-direction: column;
+  border-radius: 10px;
+}
+
+.page{
+  box-shadow: 0 5px 15px 0  #004D74;
+
+}
+
+h1 {
+  font-size: 250%;
+  line-height: 1.1;
+}
+
+h3 {
+  font-size:250%;
+  line-height: 1.1;
+}
+
+.camera-switch-button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  background-color: #45dfb1;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.camera-switch-button:hover {
+  background-color: #213a57;
+  color: white;
+}
+
+button {
+  margin-top: 7%;
+  width: 100%;
+  padding: 7%;
+  background-color:#2d6e88;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #213a57;
+  color: white;
+}
+
+.card-body{
+margin: 1%;
+}
+
+form {
+  margin-top: 10%;
+  padding: 10%;
+  flex-direction:column;
+  align-items: center;
+  border-radius: 10px;
+  border: 2px solid black;
+  /* box-shadow: 0 5px 15px 0 #0b6477; */
+}
+
+.form-group{
+  align-items: center;
+  align-content: center;
+}
+
+.input-error {
+  width: 100%;
+  text-align: center;
+  border: 2px solid red;
+}
+
+.input-success {
+  text-align: center;
+  width: 100%;
+  border: 2px solid #2d6e88;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
