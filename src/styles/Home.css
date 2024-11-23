@@ -71,7 +71,8 @@ nav {
 
 section {
   display: flex;
-  height: 80vh;
+  /* height: 80vh; */
+  height: 50%;
   justify-content: center;
   align-items: center;
 }

@@ -46,40 +46,33 @@ export default function Information() {
           <div className="active">
             <h2>Avisos Legales</h2>
             <p>
-              Acepto usar la aplicacion de forma etica y responsable unicamente
-              para fines academicos 
-              Uso.- La aplicacion esta echa para fines de
-              mejora academica. Proporciona al docente una vision general del
-              promedio de sus alumnos en el transcurso del PAO para poder
-              mejorar su metodologia. 
-              Fin.- Se pretende mejorar la calificacion
-              promedio del curso mediante la mejora emocional de los alumnos.
-              Responsabilidad.- No nos responsabilizamos por usos inadecuados de
-              la aplicacion, teniendo en cuenta el uso y fin anteriormente
-              mencionados.
+            Acepto usar la aplicación de forma ética y responsable únicamente para fines académicos. 
+            Uso. - La aplicación esta echa para fines de mejora académica. 
+            Proporciona al docente una visión general del promedio de sus alumnos en el transcurso 
+            del PAO para poder mejorar su metodología. Fin. - Se pretende mejorar la calificación 
+            promedio del curso mediante la mejora emocional de los alumnos. 
+            Responsabilidad. - No nos responsabilizamos por usos inadecuados de la aplicación, 
+            teniendo en cuenta el uso y fin anteriormente mencionados.
             </p>
           </div>
           <div>
             <h2>¿Como funciona?</h2>
             <p>
-              1.- Al momento de prender la cámara el usuario deberá proporcionar
-              la nota que quiere alcansar (8,10,25), una vez proporcionada la
-              nota, la aplicacion tomara al azar durande la clase 3 fotos las
-              mismas que serán enviadas a los modelos para identificar los
-              sujetos y sus emociones. 2.- Al final, después de la tercera foto,
-              el modelo dará un estimado de su promedio basado en las emociones.
-              3.- ¿Qué puede pasar? Sin rostros no hay predicción, sin nota no
-              hay fotos, la predicción puede tener un margen de error de 1.8
-              puntos a la calificación.
+            1.- Al momento de prender la cámara el usuario deberá proporcionar la nota que quiere alcanzar 
+            (8,10,25), una vez proporcionada la nota, la aplicación tomara al azar durante la clase 3 fotos
+             las mismas que serán enviadas a los modelos para identificar los sujetos y sus emociones. 
+             2.- Al final, después de la tercera foto, el modelo dará un estimado de su promedio basado en las emociones. 
+             3.- ¿Qué puede pasar? Sin rostros no hay predicción, sin nota no hay fotos, la predicción puede tener un 
+             margen de error de 1.8 puntos a la calificación.
             </p>
           </div>
           <div>
             <h2>Predicciones</h2>
             <p>
-              CNN.- Las imágenes serán analizadas con Redes Neuronales
+              CNN. - Las imágenes serán analizadas con Redes Neuronales
               Convolucionales (2 CNN) previamente entrenadas, una para la
               detección del rostro y otra para la identificación de las
-              emociones. PREDICCION.- Se entreno un modelo predictivo para dar
+              emociones. PREDICCION. - Se entreno un modelo predictivo para dar
               un estimado del promedio de las notas de los sujetos analizados
               basado en los datos de las emociones.
             </p>
@@ -87,7 +80,8 @@ export default function Information() {
           <div>
             <h2>Contactos</h2>
             <p>
-              Contactate con nosotros para mas informacion puedes encontrarnos en nuestras redes sociales
+            Contáctate con nosotros para más información puedes encontrarnos en 
+            nuestras redes sociales.
             </p>
               <SocialMediaIcons />
           </div>

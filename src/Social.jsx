@@ -10,7 +10,7 @@ const SocialMediaIcons = () => {
         <span><i className="fab fa-facebook-f"></i></span>
       </li>
       <li className="icon twitter">
-        <span className="tooltip">Twitter</span>
+        <span className="tooltip">X</span>
         <span><i className="fab fa-twitter"></i></span>
       </li>
       <li className="icon instagram">
