@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef,useEffect } from "react";
 import Webcam from "react-webcam";
 import "./styles/App.css";
 import Information from "./Information";
@@ -11,6 +11,7 @@ function App() {
   const [isCamaraOn, setIsCamaraOn] = useState(false);
   const [parcial, setParcial] = useState(8);
   const [user, setUser] = useState("");
+  const [cameraError, setCameraError] = useState("");
   const [parcialError, setParcialError] = useState("");
   const [userError, setUserError] = useState("");
   const [prediccion, setPrediccion] = useState(1);
@@ -19,6 +20,7 @@ function App() {
   const [reset, setReset] = useState("");
   const [respuesta, setRespuesta] = useState("");
   const [respuestaupload, setRespuestaUpload] = useState("");
+  const [selectedCamera, setSelectedCamera] = useState("");
   const webcamRef = useRef(null);
 
   const handleCamaraToggle = async () => {
@@ -40,22 +42,22 @@ function App() {
     setIsCamaraOn((prevIsCamaraOn) => !prevIsCamaraOn);
   };
 
-  const handleCameraSwitch = () => {
-    const devices = navigator.mediaDevices
-      .enumerateDevices()
-      .then((devices) => {
-        const videoDevices = devices.filter(
-          (device) => device.kind === "videoinput"
-        );
-        const currentDeviceIndex = videoDevices.findIndex(
-          (device) => device.deviceId === selectedCamera
-        );
-        const nextDevice =
-          videoDevices[(currentDeviceIndex + 1) % videoDevices.length];
-        setSelectedCamera(nextDevice.deviceId);
-      });
-  };
-
+  const handleCameraSwitch = async () => {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter((device) => device.kind === "videoinput");
+    
+    if (videoDevices.length > 1) {
+      const currentDeviceIndex = videoDevices.findIndex(
+        (device) => device.deviceId === selectedCamera
+      );
+      const nextDevice = videoDevices[(currentDeviceIndex + 1) % videoDevices.length];
+      setSelectedCamera(nextDevice.deviceId);
+      setCameraError("");
+    } else {
+      setCameraError("Solo hay una cámara");
+    }
+  }; 
+  
   const handleUserId = async (event) => {
     event.preventDefault();
     if (user === "") {
@@ -79,8 +81,18 @@ function App() {
   const videoConstraints = {
     width: 1024,
     height: 720,
+    deviceId: selectedCamera || undefined,
     facingMode: "user",
   };
+
+  useEffect(() => {
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+      const videoDevices = devices.filter((device) => device.kind === "videoinput");
+      if (videoDevices.length > 0) {
+        setSelectedCamera(videoDevices[0].deviceId);
+      }
+    });
+  }, []);  
 
   const handleParcialSubmit = async (event) => {
     event.preventDefault();
@@ -239,6 +251,7 @@ function App() {
                 >
                   Cambiar Cámara
                 </button>
+                {cameraError && <div className="error-message">{cameraError}</div>}
               </div>
             </div>
             <Webcam
