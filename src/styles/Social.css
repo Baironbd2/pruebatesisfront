@@ -84,10 +84,10 @@
   color: #ffffff;
 }
 
-.wrapper .twitter:hover,
-.wrapper .twitter:hover .tooltip,
-.wrapper .twitter:hover .tooltip::before {
-  background: #1DA1F2;
+.wrapper .x:hover,
+.wrapper .x:hover .tooltip,
+.wrapper .x:hover .tooltip::before {
+  background: #333333;
   color: #ffffff;
 }
 

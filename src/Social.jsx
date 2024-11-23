@@ -9,9 +9,9 @@ const SocialMediaIcons = () => {
         <span className="tooltip">Facebook</span>
         <span><i className="fab fa-facebook-f"></i></span>
       </li>
-      <li className="icon twitter">
+      <li className="icon x">
         <span className="tooltip">X</span>
-        <span><i className="fab fa-twitter"></i></span>
+        <span><i className="fab fa-x"></i></span>
       </li>
       <li className="icon instagram">
         <span className="tooltip">Instagram</span>
