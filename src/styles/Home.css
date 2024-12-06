@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(to left, #004D74, #003554);
+  background: linear-gradient(to left, #eeeeee, #eeeeee);
   z-index: -1;
 }
 
@@ -14,17 +14,17 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(to left, #032030, #022B42);
+  background: linear-gradient(to left, #0b0b1b, #0b0b1b);
   z-index: -1;
 }
 
 .head.light {
-  background: linear-gradient(to left, #004D74, #003554);
+  background: linear-gradient(to left, #eeeeee, #eeeeee);
   border-radius: 1%;
 }
 
 .head.dark {
-  background: linear-gradient(to left, #032030, #022B42);
+  background: linear-gradient(to left, #0b0b1b, #0b0b1b);
   color: #fff;
   border-radius: 1%;
 }
@@ -43,6 +43,7 @@ nav {
   display:inline-block;
   overflow:hidden;
   white-space:nowrap;
+  color: #52a6d6;
 }
 
 #logo:first-of-type {
